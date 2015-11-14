@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText 
+            android:id="@+id/EditTextPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="phone"
+            android:hint="输入号码添加到白名单"/>
+        <Button 
+            android:id="@+id/ButtonAddPhoneNumber"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="添加"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/RelativeLayoutMainTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/navigationbar_bg">
+		<Button 
+		    android:id="@+id/ButtonGuiJiActivityBack"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:text="返回"
+		    android:padding="5dp"
+		    android:textSize="20sp"
+            android:textColor="@color/white"
+		    android:background="@color/transparent"/>
+		<Button 
+		    android:id="@+id/ButtonGuiJiActivityEdit"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:text="编辑"
+		    android:padding="5dp"
+		    android:layout_alignParentRight="true"
+		    android:textSize="20sp"
+            android:textColor="@color/white"
+		    android:background="@color/transparent"/>
+		<Button 
+		    android:id="@+id/ButtonGuiJiActivityFinish"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerVertical="true"
+		    android:text="完成"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginRight="5dp"
+		    android:textSize="20sp"
+            android:textColor="@color/white"
+		    android:background="@color/transparent"
+		    android:visibility="gone"/>
+        <TextView
+            android:id="@+id/TextViewGuiJiTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="白名单"
+            android:textSize="24sp"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@drawable/layout_edging_style">
+        <ListView
+		    android:id="@+id/ListViewGuiJi"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:background="@color/transparent" >
+		</ListView>
+    </LinearLayout>
+
+</LinearLayout>

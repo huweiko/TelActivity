@@ -68,7 +68,7 @@ public class PhoneReceiver extends BroadcastReceiver {
 
 	private SharedPreferences sp;
 	private Context context;
-
+	private DBtableGuiJiName mDBtableGuiJiName;
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
@@ -81,20 +81,31 @@ public class PhoneReceiver extends BroadcastReceiver {
 		final String action = mIntent.get().getAction();
 		tm = (TelephonyManager) mApp.get().getSystemService(
 				Service.TELEPHONY_SERVICE);
-		start();
+		if (manager == null)
+			manager = (TelephonyManager) mApp.get().getSystemService(
+					Context.TELEPHONY_SERVICE);
+		mDBtableGuiJiName = new DBtableGuiJiName(mApp.get());
+//		start();
+		//每当用户拨打电话的时候，系统会发布（broadcast）这个 ACTION_NEW_OUTGOING_CALL 的事件
 		if (action.equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
-			incoming = false;
+/*			incoming = false;
 			number = mIntent.get().getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 			name.setText(getName(number));
 			status.setVisibility(View.VISIBLE);
 			time.setVisibility(View.GONE);
 			status.setText("正在拨号");
 			lin1.setVisibility(View.GONE);
-			lin2.setVisibility(View.VISIBLE);
+			lin2.setVisibility(View.VISIBLE);*/
 		} else {
 			switch (tm.getCallState()) {
+			// 标识当前是来电
 			case TelephonyManager.CALL_STATE_RINGING:
-				incoming = true;// 标识当前是来电
+				if(mDBtableGuiJiName.checkPhoneExists(mIntent.get().getStringExtra("incoming_number")) && !isanswer){
+					toAnswer();
+					isanswer = true;
+					
+				}
+/*				incoming = true;
 				isanswer = false;
 				number = mIntent.get().getStringExtra("incoming_number");
 				name.setText(getName(number));
@@ -103,10 +114,12 @@ public class PhoneReceiver extends BroadcastReceiver {
 				lin2.setVisibility(View.GONE);
 				status.setVisibility(View.VISIBLE);
 				time.setVisibility(View.GONE);
-				tools.setVisibility(View.GONE);
+				tools.setVisibility(View.GONE);*/
 				break;
+				//摘机状态，至少有个电话活动。就是接听电话了
 			case TelephonyManager.CALL_STATE_OFFHOOK:
-				if (incoming) {
+				
+			/*	if (incoming) {
 					isanswer = true;
 					lin1.setVisibility(View.GONE);
 					lin2.setVisibility(View.VISIBLE);
@@ -117,21 +130,35 @@ public class PhoneReceiver extends BroadcastReceiver {
 						time.setBase(SystemClock.elapsedRealtime());
 						time.start();
 					}
+				}*/
+				if(isanswer){
+					Intent inten= new Intent(Intent.ACTION_MAIN);  
+
+					inten.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //如果是服务里调用，必须加入new task标识    
+
+					inten.addCategory(Intent.CATEGORY_HOME);
+
+					mApp.get().startActivity(inten);  
 				}
+				
 				break;
+				//空闲状态，没有任何活动。也就是挂断了
 			case TelephonyManager.CALL_STATE_IDLE:
-				if (incoming) {
+				if(isanswer){
+					isanswer = false;
+				}
+/*				if (incoming) {
 					lin1.setVisibility(View.GONE);
 					lin2.setVisibility(View.GONE);
 					if (time != null)
 						time.stop();
 					if (!isanswer)
 						toNotic(mApp.get(), mIntent.get());
-				}
+				}*/
 				break;
 			}
 		}
-		if (incoming) {
+/*		if (incoming) {
 			if (tm.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
 				if (num == 0) {
 					// if(incomingFlag)
@@ -157,7 +184,7 @@ public class PhoneReceiver extends BroadcastReceiver {
 				num = 0;
 			}
 
-		}
+		}*/
 	}
 
 	/*
@@ -172,7 +199,14 @@ public class PhoneReceiver extends BroadcastReceiver {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		context.startActivity(intent);
 	}
+	public void toHome(Context context, Intent intent) {
 
+		 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //如果是服务里调用，必须加入new task标识    
+
+		intent.addCategory(Intent.CATEGORY_HOME);
+
+		context.startActivity(intent);
+	}
 	void start() {
 		if (manager == null)
 			manager = (TelephonyManager) mApp.get().getSystemService(
@@ -400,7 +434,7 @@ public class PhoneReceiver extends BroadcastReceiver {
 			return (int) (dpValue * scale + 0.5f);
 		}
 	}
-
+//接听电话
 	void toAnswer() {
 		try {
 			Method getITelephonyMethod = TelephonyManager.class
@@ -414,7 +448,7 @@ public class PhoneReceiver extends BroadcastReceiver {
 			e.printStackTrace();
 		}
 	}
-
+//挂断电话
 	void toEnd() {
 		try {
 			Method getITelephonyMethod = TelephonyManager.class
