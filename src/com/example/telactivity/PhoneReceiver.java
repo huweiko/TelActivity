@@ -73,6 +73,7 @@ public class PhoneReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		// Log.i("phone", "num");
+		abortBroadcast();
 		mApp = new WeakReference<Context>(context);
 		mIntent = new WeakReference<Intent>(intent);
 		this.context = context;
